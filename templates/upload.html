@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>농약 상품 목록</title>
+    <!-- 부트스트랩 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 폰트어썸 CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- 스타일 -->
+        <title>참고자료</title>
+        <!--추가된부분-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" /> <!-- 수정부분-->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+        <!--폰트-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500&family=Noto+Serif+KR:wght@400;500&display=swap" rel="stylesheet">      <!--폰트-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- 수정부분-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Video Player</title>
+        <!--수정부분-->
+        <!-- 수정부분-->
+        <style>
+
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+            }
+            main {
+                padding-top: 20px; /* 상단 여백 */
+                padding-right: 20px; /* 오른쪽 여백 */
+                padding-bottom: 20px; /* 하단 여백 */
+                padding-left: 20px; /* 네비게이션 너비만큼 왼쪽 여백 */
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            
+            .card {
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                transition: 0.3s;
+                border-radius: 10px;
+                margin-bottom: 20px;
+            }
+            
+            .card:hover {
+                box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            }
+            
+            .card img {
+                border-radius: 10px 10px 0 0;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+            
+            .card-title {
+                font-weight: bold;
+            }
+            
+            .card-text {
+                margin-bottom: 10px;
+            }
+            
+            .btn-primary {
+                background-color: #f26c00;
+                border: none;
+                color: white;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            
+            .btn-primary:hover {
+                background-color: #d55f00;
+            }
+            
+            
+            .sb-topnav.navbar.bg-dark {
+                background-color: #000000 !important;
+            }
+        
+            .sb-topnav.navbar .navbar-brand {
+                color: white !important;
+            }
+        
+            .sb-topnav.navbar .navbar-toggler-icon {
+                background-color: white !important;
+            }
+            
+            .sb-sidenav {
+                background-color: #000000 !important; /* Set your desired background color */
+            }
+
+            .sb-sidenav-footer {
+                background-color: #000000 !important;
+            }
+
+            h1 {
+                font-weight: bold;
+            }
+
+            .search-sorting {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+        
+            .sorting-options-box, .display-options-box {
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 10px;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            }
+        
+            .sorting-options-box h2, .display-options-box h2 {
+                margin-bottom: 10px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+        
+            .sorting-buttons, .display-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        
+            .sorting-button, .display-button {
+                padding: 8px 16px;
+                border: none;
+                border-radius: 5px;
+                background-color: #ffaa00;
+                color: #fff;
+                font-size: 14px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+        
+            .sorting-button.active, .display-button.active {
+                background-color: #ffaa00;
+            }
+        
+            .sorting-button:hover, .display-button:hover {
+                background-color: #ffaa00;
+            }
+            
+        </style>
+        <!---->
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="{{ url_for('start', name='index.html') }}">Crop diagnosis</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    {% if 'loggedin' in session and session['loggedin'] %}
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('start', name='profile.html') }}">마이페이지</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('start', name='tables.html') }}">이전기록 분석</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">로그아웃</a></li>
+                        </ul>
+                    {% else %}
+                        <a class="nav-link" href="{{ url_for('login') }}">로그인</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <a class="nav-link" href="{{ url_for('start', name='index.html') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                근골격계 자세 개선
+                            </a>
+                            <!-- 나중에 필요없다고 느껴지면-->
+                            <div class="sb-sidenav-menu-heading"></div>
+                            <a class="nav-link" href="{{ url_for('start', name='upload.html') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                업로드
+                            </a>
+                            <a class="nav-link" href="{{ url_for('start', name='image.html') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-image"></i></div>
+                                이미지
+                            </a>
+                            {% if 'loggedin' in session and session['loggedin'] %}
+                            <!-- 로그인 상태인 경우에만 이전 기록 분석 링크를 보여줌 -->
+                            <a class="nav-link" href="{{ url_for('start', name='tables.html') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                이전 기록 분석
+                            </a>
+                            {% endif %}
+                            <a class="nav-link" href="{{ url_for('start', name='point.html') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                참고자료
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        {{ session['username'] }}
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <main>
+                        <h1 class="mt-4">Product list</h1>
+                        
+                        <div class="row row-cols-1 row-cols-md-4 g-4">
+                            <!-- 상품 카드 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="{{ url_for('static', filename='assets/img/images.jpg') }}" class="card-img-top" alt="엔텍퍼팩트5kg">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Fertilizer 5kg</h5>
+                                        <p class="card-text">Rating: 4.2</p>
+                                        <p class="card-text">Number of Reviews: 6</p>
+                                        <p class="card-text">Discount Rate: 49%</p>
+                                        <p class="card-text">Regular Price: ₱3,963</p>
+                                        <p class="card-text">Discounted Price: ₱3,500</p>
+                                        <p class="card-text">Shipping Fee: ₱50 (Free shipping on purchases over ₱3,000)</p>
+ 
+                                        <!-- Purchase Options -->
+                                        <div class="purchase-options">
+                                            <button class="btn btn-primary">Add to Cart</button>
+                                            <button class="btn btn-primary">Buy Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 추가 상품 카드들 -->
+                            <!-- 상품 카드 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="//thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/vendor_inventory/d536/d35066e7b74f8753ca133f6236efefd0a31f3491c8a8d4eed87ae209bec5.jpg" class="card-img-top" alt="엔텍퍼팩트5kg">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Organic Feed 5kg</h5>
+                                        <p class="card-text">Rating: 4.2</p>
+                                        <p class="card-text">Number of Reviews: 6</p>
+                                        <p class="card-text">Discount Rate: 49%</p>
+                                        <p class="card-text">Regular Price: ₱3,963</p>
+                                        <p class="card-text">Discounted Price: ₱3,500</p>
+                                        <p class="card-text">Shipping Fee: ₱50 (Free shipping on purchases over ₱3,000)</p>
+                                        <!-- Purchase Options -->
+                                        <div class="purchase-options">
+                                            <button class="btn btn-primary">Add to Cart</button>
+                                            <button class="btn btn-primary">Buy Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 추가 상품 카드들 -->
+                            <!-- 상품 카드 -->
+
+                            <!-- 추가 상품 카드들 -->
+                        </div>
+                    </main>
+                    
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">디지털스마트부산 아카데미 3기</div>
+                            <div>
+                                <a href="{{ url_for('start', name='private.html') }}">개인정보 처리방침</a>
+                                &middot;
+                                <a href="{{ url_for('start', name='termsuse.html') }}">이용약관</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="{{ url_for('start', name='js/scripts.js') }}"></script> <!-- 수정된 부분 -->
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="{{ url_for('start', name='js/datatables-simple-demo.js') }}"></script> <!-- 수정된 부분 -->
+    </body>
+</html>
